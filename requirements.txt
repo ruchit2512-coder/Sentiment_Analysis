@@ -1,9 +1,10 @@
-tensorflow>2.16.0
+protobuf>=3.20.0,<4.21
+tensorflow>=2.16.0
+streamlit>=1.28.0
 pandas 
 numpy 
 scikit-learn
 tensorboard
 matplotlib
-streamlit
 scikeras
 nltk
