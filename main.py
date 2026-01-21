@@ -3,6 +3,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.datasets import imdb
 from tensorflow.keras.preprocessing import sequence
+from tensorflow.keras.layers import SimpleRNN
 from tensorflow.keras.models import load_model
 
 # Load the IMDB dataset word index
@@ -10,7 +11,17 @@ word_index = imdb.get_word_index()
 reverse_word_index = {value: key for key, value in word_index.items()}
 
 # Load the pre-trained model with ReLU activation
-model = load_model('simple_rnn_imdb.h5')
+class CompatibleSimpleRNN(SimpleRNN):
+    def __init__(self, *args, **kwargs):
+        # Filter out time_major and other deprecated args
+        if 'time_major' in kwargs:
+            kwargs.pop('time_major')
+        super().__init__(*args, **kwargs)
+
+# Load with custom objects
+model = load_model('simple_rnn_imdb.h5', 
+                  custom_objects={'SimpleRNN': CompatibleSimpleRNN})
+# model = load_model('simple_rnn_imdb.h5')
 
 # Step 2: Helper Functions
 # Function to decode reviews
